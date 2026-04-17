@@ -222,29 +222,36 @@
     const modal = document.getElementById('imageModal');
     const sliderWrapper = document.getElementById('sliderWrapper');
 
+    let isModalOpen = false;
+
     function openModal(index) {
         modal.style.display = 'block';
+        isModalOpen = true;
         const slideWidth = sliderWrapper.offsetWidth;
         sliderWrapper.scrollLeft = index * slideWidth;
         
-        // ব্যাক বাটন হ্যান্ডেল করার জন্য ব্রাউজার হিস্ট্রিতে একটি স্টেট পুশ করা
-        window.history.pushState({modalOpen: true}, "");
+        // ব্রাউজার হিস্ট্রিতে নতুন স্টেট পুশ করা
+        window.history.pushState({modal: 'open'}, "");
     }
 
     function closeModal() {
-        if (modal.style.display === 'block') {
-            modal.style.display = 'none';
-        }
+        modal.style.display = 'none';
+        isModalOpen = false;
     }
 
     galleryImages.forEach((img, index) => {
         const slide = document.createElement('div');
         slide.className = 'slide';
-        slide.onclick = () => { window.history.back(); }; // বাইরের ক্লিক ব্যাক বাটনের মতো কাজ করবে
+        // স্লাইডের খালি জায়গায় ক্লিক করলে মোডাল বন্ধ হবে
+        slide.onclick = (e) => {
+            if (e.target === slide) {
+                window.history.back(); // এটি popstate ইভেন্ট ট্রিগার করবে এবং closeModal কল হবে
+            }
+        };
         
         const fullImg = document.createElement('img');
         fullImg.src = img.src;
-        fullImg.onclick = (e) => { e.stopPropagation(); }; // ইমেজে ক্লিক করলে বন্ধ হবে না
+        fullImg.onclick = (e) => { e.stopPropagation(); }; // ছবিতে ক্লিক করলে কিছু হবে না (শুধু স্লাইড)
         
         slide.appendChild(fullImg);
         sliderWrapper.appendChild(slide);
@@ -254,13 +261,17 @@
         });
     });
 
-    // ব্রাউজার ব্যাক বাটন ক্লিক করলে এই ইভেন্টটি কাজ করবে
+    // ব্রাউজারের ব্যাক বাটন বা window.history.back() এর জন্য
     window.onpopstate = function(event) {
         closeModal();
     };
 
-    // সরাসরি মোডালে ক্লিক করলে ব্যাক হবে
-    modal.onclick = () => { window.history.back(); };
+    // মোডালের বাইরের অংশে ক্লিক হ্যান্ডলার (নিরাপত্তার জন্য)
+    modal.onclick = (e) => {
+        if (e.target === modal || e.target === sliderWrapper) {
+            window.history.back();
+        }
+    };
 </script>
 
 </body>

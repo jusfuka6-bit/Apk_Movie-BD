@@ -1,1 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie BD - App Store</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #ffffff;
+            color: #202124;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Header Section */
+        .app-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 18px;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+
+        .app-info h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 500;
+        }
+
+        /* Stats Row */
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 25px 0;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        .stat-item {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            font-size: 16px;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        /* Install Button */
+        .install-link {
+            text-decoration: none;
+        }
+
+        .install-btn {
+            background-color: #01579b;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 30px;
+            display: block;
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        .install-btn:active {
+            background-color: #014377;
+        }
+
+        /* Screenshot Section */
+        .screenshots {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+        }
+
+        .screenshots img {
+            width: 160px;
+            border-radius: 10px;
+            border: 1px solid #f1f3f4;
+        }
+
+        /* About Section */
+        .about-section h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .about-section p {
+            color: #5f6368;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="app-header">
+        <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Movie_BD.jpg" alt="App Logo" class="app-logo">
+        <div class="app-info">
+            <h1>Movie BD</h1>
+        </div>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-item">
+            <span class="stat-value">Version: 2.2</span> 
+        </div>
+        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;">
+            <span class="stat-value" id="download-count">Loading...</span>
+            <span class="stat-label">Downloads</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">12+</span>
+            <span class="stat-label">Rated for 12+</span>
+        </div>
+    </div>
+
+    <a href="https://raw.githubusercontent.com/jusfuka6-bit/Apk/main/Movie%20BD.apk" class="install-link" id="download-trigger">
+        <button class="install-btn">Update</button>
+    </a>
+
+    <div class="screenshots">
+        <img src="https://via.placeholder.com/160x300?text=Screen+1" alt="Screenshot 1">
+        <img src="https://via.placeholder.com/160x300?text=Screen+2" alt="Screenshot 2">
+        <img src="https://via.placeholder.com/160x300?text=Screen+3" alt="Screenshot 3">
+        <img src="https://via.placeholder.com/160x300?text=Screen+4" alt="Screenshot 4">
+    </div>
+
+    <div class="about-section">
+        <h2>About this app</h2>
+        <p>Movie BD - আপনার প্রিয় সিনেমা ও নাটকের সব খবর এবং আপডেট এখন এক অ্যাপেই।</p>
+    </div>
+</div>
+
+<script>
+    // CountAPI ব্যবহার করে রিয়েল টাইম কাউন্টার
+    const namespace = "movie-bd-app-2024"; // আপনার অ্যাপের জন্য একটি ইউনিক নাম
+    const key = "download_clicks";
+    const countDisplay = document.getElementById('download-count');
+    const downloadBtn = document.getElementById('download-trigger');
+
+    // বর্তমান ডাউনলোড সংখ্যা সার্ভার থেকে আনা
+    function updateDisplay() {
+        fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+            .then(res => res.json())
+            .then(res => {
+                countDisplay.innerText = res.value || 22;
+            })
+            .catch(() => {
+                countDisplay.innerText = "22"; // এরর হলে ডিফল্ট সংখ্যা
+            });
+    }
+
+    // বাটনে ক্লিক করলে সংখ্যা ১ বাড়ানো
+    downloadBtn.addEventListener('click', () => {
+        fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+            .then(res => res.json())
+            .then(res => {
+                countDisplay.innerText = res.value;
+            });
+    });
+
+    // পেজ লোড হলে কল হবে
+    updateDisplay();
+</script>
+
+</body>
+</html>
 

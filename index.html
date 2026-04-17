@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie BD - App Store</title>
     <style>
+        /* টেক্সট সিলেকশন বন্ধ */
+        * {
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -18,7 +26,6 @@
             margin: 0 auto;
         }
 
-        /* Header Section */
         .app-header {
             display: flex;
             align-items: flex-start;
@@ -39,7 +46,6 @@
             font-weight: 500;
         }
 
-        /* Stats Row */
         .stats-container {
             display: flex;
             justify-content: space-between;
@@ -49,25 +55,9 @@
             padding-bottom: 15px;
         }
 
-        .stat-item {
-            flex: 1;
-        }
-
-        .stat-value {
-            font-weight: bold;
-            font-size: 16px;
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #5f6368;
-        }
-
-        /* Update Button */
-        .install-link {
-            text-decoration: none;
-        }
+        .stat-item { flex: 1; }
+        .stat-value { font-weight: bold; font-size: 16px; display: block; }
+        .stat-label { font-size: 12px; color: #5f6368; }
 
         .install-btn {
             background-color: #01579b;
@@ -84,7 +74,7 @@
             text-align: center;
         }
 
-        /* Screenshot Section */
+        /* স্ক্রিনশট লিস্ট */
         .screenshots {
             display: flex;
             overflow-x: auto;
@@ -97,9 +87,52 @@
             width: 160px;
             border-radius: 10px;
             border: 1px solid #f1f3f4;
+            cursor: pointer;
         }
 
-        /* Toast Message Design */
+        /* স্লাইডার মোডাল */
+        #imageModal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85); /* হালকা স্বচ্ছ ব্যাকগ্রাউন্ড */
+        }
+
+        .slider-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+
+        .slider-wrapper::-webkit-scrollbar { display: none; }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: start;
+        }
+
+        /* ফুল স্ক্রিন ছবি ছোট এবং রাউন্ড করা */
+        .slide img {
+            max-width: 80%; /* ছবি ছোট করা হয়েছে */
+            max-height: 80%;
+            object-fit: contain;
+            border-radius: 20px; /* ছবি রাউন্ড করা হয়েছে */
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            pointer-events: auto;
+        }
+
+        /* টোস্ট মেসেজ */
         #toast {
             visibility: hidden;
             min-width: 250px;
@@ -114,33 +147,18 @@
             bottom: 30px;
             transform: translateX(-50%);
             font-size: 17px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
         }
 
         #toast.show {
             visibility: visible;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 4.5s;
         }
 
-        @keyframes fadein {
-            from {bottom: 0; opacity: 0;}
-            to {bottom: 30px; opacity: 1;}
-        }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 
-        @keyframes fadeout {
-            from {bottom: 30px; opacity: 1;}
-            to {bottom: 0; opacity: 0;}
-        }
-
-        .about-section h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
-        .about-section p {
-            color: #5f6368;
-            line-height: 1.5;
-        }
+        .about-section h2 { font-size: 20px; margin-bottom: 10px; }
+        .about-section p { color: #5f6368; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -158,7 +176,7 @@
             <span class="stat-value">Version: 2.2</span> 
         </div>
         <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;">
-            <span class="stat-value">22</span> <span class="stat-label">Downloads</span>
+            <span class="stat-label">Update</span> <span class="stat-value">17/April</span>
         </div>
         <div class="stat-item">
             <span class="stat-value">12+</span>
@@ -166,17 +184,23 @@
         </div>
     </div>
 
-    <a href="https://raw.githubusercontent.com/jusfuka6-bit/Apk/main/Movie%20BD.apk" class="install-link" id="download-trigger">
+    <a href="https://raw.githubusercontent.com/jusfuka6-bit/Apk/main/Movie%20BD.apk" style="text-decoration: none;" id="download-trigger">
         <button class="install-btn">Update</button>
     </a>
 
     <div id="toast">অ্যাপ ডাউনলোড হচ্ছে...</div>
 
-    <div class="screenshots">
-        <img src="https://via.placeholder.com/160x300?text=Screen+1" alt="Screenshot 1">
-        <img src="https://via.placeholder.com/160x300?text=Screen+2" alt="Screenshot 2">
-        <img src="https://via.placeholder.com/160x300?text=Screen+3" alt="Screenshot 3">
-        <img src="https://via.placeholder.com/160x300?text=Screen+4" alt="Screenshot 4">
+    <div class="screenshots" id="gallery">
+        <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_1.jpg">
+        <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_2.jpg">
+        <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_3.jpg">
+        <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_4.jpg">
+        <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_5.jpg">
+    </div>
+
+    <div id="imageModal">
+        <div class="slider-wrapper" id="sliderWrapper">
+            </div>
     </div>
 
     <div class="about-section">
@@ -186,19 +210,45 @@
 </div>
 
 <script>
+    // ডাউনলোড টোস্ট
     const downloadBtn = document.getElementById('download-trigger');
     const toast = document.getElementById('toast');
 
     downloadBtn.addEventListener('click', function() {
-        // টোস্ট মেসেজ দেখানো
         toast.className = "show";
-        
-        // ৩ সেকেন্ড পর টোস্টটি সরিয়ে ফেলা
-        setTimeout(function(){ 
-            toast.className = toast.className.replace("show", ""); 
-        }, 5000);
+        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 5000);
     });
+
+    // স্লাইডার গ্যালারি
+    const galleryImages = document.querySelectorAll('#gallery img');
+    const modal = document.getElementById('imageModal');
+    const sliderWrapper = document.getElementById('sliderWrapper');
+
+    galleryImages.forEach((img, index) => {
+        const slide = document.createElement('div');
+        slide.className = 'slide';
+        // স্লাইডের ভেতরে ক্লিক করলে মোডাল বন্ধ হবে (ইমেজের বাইরে ক্লিক ধরা হবে)
+        slide.onclick = () => { modal.style.display = 'none'; };
+        
+        const fullImg = document.createElement('img');
+        fullImg.src = img.src;
+        // ইমেজে ক্লিক করলে যাতে মোডাল বন্ধ না হয় (শুধু স্লাইড হয়)
+        fullImg.onclick = (e) => { e.stopPropagation(); };
+        
+        slide.appendChild(fullImg);
+        sliderWrapper.appendChild(slide);
+
+        img.addEventListener('click', () => {
+            modal.style.display = 'block';
+            const slideWidth = sliderWrapper.offsetWidth;
+            sliderWrapper.scrollLeft = index * slideWidth;
+        });
+    });
+
+    // ইমেজের বাইরের কালো অংশে ক্লিক করলে মোডাল বন্ধ হবে
+    modal.onclick = () => { modal.style.display = 'none'; };
 </script>
 
 </body>
-</html>
+                </html>
+                

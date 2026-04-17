@@ -46,16 +46,23 @@
             font-weight: 500;
         }
 
-        /* নামের নিচের লোগো স্টাইল */
-        .header-socials {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
+        /* রিকোয়েস্ট মুভি বাটন স্টাইল */
+        .request-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 20px;
+            background-color: #f1f3f4;
+            color: #01579b;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid #01579b;
+            transition: 0.3s;
         }
 
-        .header-socials a img {
-            width: 36px;
-            height: 36px;
+        .request-btn:active {
+            background-color: #e1f5fe;
         }
 
         .stats-container {
@@ -176,11 +183,7 @@
         <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Movie_BD.jpg" alt="App Logo" class="app-logo">
         <div class="app-info">
             <h1>Movie BD</h1>
-            <div class="header-socials">
-                <a href="https://chat.whatsapp.com/B9ZF5HigfuLEDysgbItkPh?mode=gi_t" target="_blank">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
-                </a>
-            </div>
+            <a href="https://jusfuka6-bit.github.io/Movie-Request/" target="_blank" class="request-btn">Request Movie</a>
         </div>
     </div>
 

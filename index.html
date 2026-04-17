@@ -99,7 +99,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.85); /* হালকা স্বচ্ছ ব্যাকগ্রাউন্ড */
+            background-color: rgba(0,0,0,0.85);
         }
 
         .slider-wrapper {
@@ -122,12 +122,11 @@
             scroll-snap-align: start;
         }
 
-        /* ফুল স্ক্রিন ছবি ছোট এবং রাউন্ড করা */
         .slide img {
-            max-width: 80%; /* ছবি ছোট করা হয়েছে */
+            max-width: 80%;
             max-height: 80%;
             object-fit: contain;
-            border-radius: 20px; /* ছবি রাউন্ড করা হয়েছে */
+            border-radius: 20px;
             box-shadow: 0 5px 25px rgba(0,0,0,0.5);
             pointer-events: auto;
         }
@@ -195,7 +194,6 @@
         <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_2.jpg">
         <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_3.jpg">
         <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_4.jpg">
-        <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_5.jpg">
     </div>
 
     <div id="imageModal">
@@ -219,36 +217,51 @@
         setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 5000);
     });
 
-    // স্লাইডার গ্যালারি
+    // স্লাইডার গ্যালারি এবং ব্যাক বাটন লজিক
     const galleryImages = document.querySelectorAll('#gallery img');
     const modal = document.getElementById('imageModal');
     const sliderWrapper = document.getElementById('sliderWrapper');
 
+    function openModal(index) {
+        modal.style.display = 'block';
+        const slideWidth = sliderWrapper.offsetWidth;
+        sliderWrapper.scrollLeft = index * slideWidth;
+        
+        // ব্যাক বাটন হ্যান্ডেল করার জন্য ব্রাউজার হিস্ট্রিতে একটি স্টেট পুশ করা
+        window.history.pushState({modalOpen: true}, "");
+    }
+
+    function closeModal() {
+        if (modal.style.display === 'block') {
+            modal.style.display = 'none';
+        }
+    }
+
     galleryImages.forEach((img, index) => {
         const slide = document.createElement('div');
         slide.className = 'slide';
-        // স্লাইডের ভেতরে ক্লিক করলে মোডাল বন্ধ হবে (ইমেজের বাইরে ক্লিক ধরা হবে)
-        slide.onclick = () => { modal.style.display = 'none'; };
+        slide.onclick = () => { window.history.back(); }; // বাইরের ক্লিক ব্যাক বাটনের মতো কাজ করবে
         
         const fullImg = document.createElement('img');
         fullImg.src = img.src;
-        // ইমেজে ক্লিক করলে যাতে মোডাল বন্ধ না হয় (শুধু স্লাইড হয়)
-        fullImg.onclick = (e) => { e.stopPropagation(); };
+        fullImg.onclick = (e) => { e.stopPropagation(); }; // ইমেজে ক্লিক করলে বন্ধ হবে না
         
         slide.appendChild(fullImg);
         sliderWrapper.appendChild(slide);
 
         img.addEventListener('click', () => {
-            modal.style.display = 'block';
-            const slideWidth = sliderWrapper.offsetWidth;
-            sliderWrapper.scrollLeft = index * slideWidth;
+            openModal(index);
         });
     });
 
-    // ইমেজের বাইরের কালো অংশে ক্লিক করলে মোডাল বন্ধ হবে
-    modal.onclick = () => { modal.style.display = 'none'; };
+    // ব্রাউজার ব্যাক বাটন ক্লিক করলে এই ইভেন্টটি কাজ করবে
+    window.onpopstate = function(event) {
+        closeModal();
+    };
+
+    // সরাসরি মোডালে ক্লিক করলে ব্যাক হবে
+    modal.onclick = () => { window.history.back(); };
 </script>
 
 </body>
-                </html>
-                
+</html>

@@ -138,6 +138,7 @@
             object-fit: contain;
             border-radius: 20px;
             box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            pointer-events: auto;
         }
 
         #toast {
@@ -166,19 +167,6 @@
 
         .about-section h2 { font-size: 20px; margin-bottom: 10px; }
         .about-section p { color: #5f6368; line-height: 1.5; margin: 5px 0; }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 25px;
-            margin-bottom: 20px;
-        }
-
-        .social-links a img {
-            width: 45px;
-            height: 45px;
-        }
     </style>
 </head>
 <body>
@@ -234,19 +222,11 @@
         <h2>About this app</h2>
         <p>Movie BD - আপনার প্রিয় সিনেমা ও নাটক</p>
         <p>আপনি যদি কোন মুভি দেখতে চান যা আমাদের অ্যাপে নেই তাহলে মুভির নাম সহ আমাদের সাথে যোগাযোগ করুন</p>
-        
-        <div class="social-links">
-            <a href="https://wa.me/8801400265244" target="_blank">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
-            </a>
-            <a href="https://t.me/+8801400265244" target="_blank">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
-            </a>
-        </div>
     </div>
 </div>
 
 <script>
+    // ডাউনলোড টোস্ট
     const downloadBtn = document.getElementById('download-trigger');
     const toast = document.getElementById('toast');
 
@@ -255,6 +235,7 @@
         setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 5000);
     });
 
+    // স্লাইডার গ্যালারি এবং ব্যাক বাটন লজিক
     const galleryImages = document.querySelectorAll('#gallery img');
     const modal = document.getElementById('imageModal');
     const sliderWrapper = document.getElementById('sliderWrapper');

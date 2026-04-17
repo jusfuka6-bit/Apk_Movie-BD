@@ -64,7 +64,7 @@
             color: #5f6368;
         }
 
-        /* Install Button */
+        /* Update Button */
         .install-link {
             text-decoration: none;
         }
@@ -82,11 +82,11 @@
             margin-bottom: 30px;
             display: block;
             text-align: center;
-            transition: background 0.3s;
         }
 
         .install-btn:active {
             background-color: #014377;
+            transform: scale(0.98);
         }
 
         /* Screenshot Section */
@@ -102,6 +102,7 @@
             width: 160px;
             border-radius: 10px;
             border: 1px solid #f1f3f4;
+            background-color: #eee;
         }
 
         /* About Section */
@@ -158,37 +159,50 @@
 </div>
 
 <script>
-    // CountAPI ব্যবহার করে রিয়েল টাইম কাউন্টার
-    const namespace = "movie-bd-app-2024"; // আপনার অ্যাপের জন্য একটি ইউনিক নাম
-    const key = "download_clicks";
+    // CORS সমস্যা এড়াতে JSONP বা সোজাসুজি API কল করার টেকনিক
     const countDisplay = document.getElementById('download-count');
     const downloadBtn = document.getElementById('download-trigger');
 
-    // বর্তমান ডাউনলোড সংখ্যা সার্ভার থেকে আনা
-    function updateDisplay() {
-        fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
-            .then(res => res.json())
-            .then(res => {
-                countDisplay.innerText = res.value || 22;
-            })
-            .catch(() => {
-                countDisplay.innerText = "22"; // এরর হলে ডিফল্ট সংখ্যা
-            });
+    // আপনার অ্যাপের জন্য একটি ইউনিক আইডি
+    const appID = "movie_bd_jusfuka_unique"; 
+
+    // সংখ্যা লোড করার ফাংশন
+    async function loadDownloads() {
+        try {
+            const response = await fetch(`https://api.countapi.xyz/get/${appID}/clicks`).catch(() => null);
+            if (response) {
+                const data = await response.json();
+                countDisplay.innerText = data.value || 22;
+            } else {
+                // বিকল্প API যদি প্রথমটি কাজ না করে
+                const altRes = await fetch(`https://api.counterapi.dev/v1/${appID}/downloads`);
+                const altData = await altRes.json();
+                countDisplay.innerText = altData.count || 22;
+            }
+        } catch (e) {
+            countDisplay.innerText = "22"; // এরর হলে ডিফল্ট সংখ্যা
+        }
     }
 
-    // বাটনে ক্লিক করলে সংখ্যা ১ বাড়ানো
-    downloadBtn.addEventListener('click', () => {
-        fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-            .then(res => res.json())
-            .then(res => {
-                countDisplay.innerText = res.value;
-            });
+    // বাটনে ক্লিক করলে সংখ্যা বাড়ানো
+    downloadBtn.addEventListener('click', async () => {
+        try {
+            // সংখ্যা বাড়ানোর রিকোয়েস্ট
+            fetch(`https://api.counterapi.dev/v1/${appID}/downloads/up`);
+            
+            // তাৎক্ষণিক ইউজার ইন্টারফেসে ১ বাড়িয়ে দেখানো
+            let currentNum = parseInt(countDisplay.innerText);
+            if(!isNaN(currentNum)) {
+                countDisplay.innerText = currentNum + 1;
+            }
+        } catch (e) {
+            console.log("Update failed but link will still work.");
+        }
     });
 
     // পেজ লোড হলে কল হবে
-    updateDisplay();
+    loadDownloads();
 </script>
 
 </body>
 </html>
-

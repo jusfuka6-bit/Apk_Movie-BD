@@ -46,6 +46,18 @@
             font-weight: 500;
         }
 
+        /* নামের নিচের লোগো স্টাইল */
+        .header-socials {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .header-socials a img {
+            width: 24px;
+            height: 24px;
+        }
+
         .stats-container {
             display: flex;
             justify-content: space-between;
@@ -74,7 +86,6 @@
             text-align: center;
         }
 
-        /* স্ক্রিনশট লিস্ট */
         .screenshots {
             display: flex;
             overflow-x: auto;
@@ -90,7 +101,6 @@
             cursor: pointer;
         }
 
-        /* স্লাইডার মোডাল */
         #imageModal {
             display: none;
             position: fixed;
@@ -128,10 +138,8 @@
             object-fit: contain;
             border-radius: 20px;
             box-shadow: 0 5px 25px rgba(0,0,0,0.5);
-            pointer-events: auto;
         }
 
-        /* টোস্ট মেসেজ */
         #toast {
             visibility: hidden;
             min-width: 250px;
@@ -157,7 +165,20 @@
         @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 
         .about-section h2 { font-size: 20px; margin-bottom: 10px; }
-        .about-section p { color: #5f6368; line-height: 1.5; }
+        .about-section p { color: #5f6368; line-height: 1.5; margin: 5px 0; }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+            margin-bottom: 20px;
+        }
+
+        .social-links a img {
+            width: 45px;
+            height: 45px;
+        }
     </style>
 </head>
 <body>
@@ -167,6 +188,14 @@
         <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Movie_BD.jpg" alt="App Logo" class="app-logo">
         <div class="app-info">
             <h1>Movie BD</h1>
+            <div class="header-socials">
+                <a href="https://wa.me/8801400265244" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+                </a>
+                <a href="https://t.me/+8801400265244" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+                </a>
+            </div>
         </div>
     </div>
 
@@ -195,23 +224,29 @@
         <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_3.jpg">
         <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_4.jpg">
         <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_5.jpg">
-        
     </div>
 
     <div id="imageModal">
-        <div class="slider-wrapper" id="sliderWrapper">
-            </div>
+        <div class="slider-wrapper" id="sliderWrapper"></div>
     </div>
 
     <div class="about-section">
         <h2>About this app</h2>
-        <p>Movie BD - আপনার প্রিয় সিনেমা ও নাটক </p>
-        <p>Bangla Hindi English </p>
+        <p>Movie BD - আপনার প্রিয় সিনেমা ও নাটক</p>
+        <p>আপনি যদি কোন মুভি দেখতে চান যা আমাদের অ্যাপে নেই তাহলে মুভির নাম সহ আমাদের সাথে যোগাযোগ করুন</p>
+        
+        <div class="social-links">
+            <a href="https://wa.me/8801400265244" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+            </a>
+            <a href="https://t.me/+8801400265244" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+            </a>
+        </div>
     </div>
 </div>
 
 <script>
-    // ডাউনলোড টোস্ট
     const downloadBtn = document.getElementById('download-trigger');
     const toast = document.getElementById('toast');
 
@@ -220,41 +255,29 @@
         setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 5000);
     });
 
-    // স্লাইডার গ্যালারি এবং ব্যাক বাটন লজিক
     const galleryImages = document.querySelectorAll('#gallery img');
     const modal = document.getElementById('imageModal');
     const sliderWrapper = document.getElementById('sliderWrapper');
 
-    let isModalOpen = false;
-
     function openModal(index) {
         modal.style.display = 'block';
-        isModalOpen = true;
         const slideWidth = sliderWrapper.offsetWidth;
         sliderWrapper.scrollLeft = index * slideWidth;
-        
-        // ব্রাউজার হিস্ট্রিতে নতুন স্টেট পুশ করা
         window.history.pushState({modal: 'open'}, "");
     }
 
     function closeModal() {
         modal.style.display = 'none';
-        isModalOpen = false;
     }
 
     galleryImages.forEach((img, index) => {
         const slide = document.createElement('div');
         slide.className = 'slide';
-        // স্লাইডের খালি জায়গায় ক্লিক করলে মোডাল বন্ধ হবে
-        slide.onclick = (e) => {
-            if (e.target === slide) {
-                window.history.back(); // এটি popstate ইভেন্ট ট্রিগার করবে এবং closeModal কল হবে
-            }
-        };
+        slide.onclick = (e) => { if (e.target === slide) window.history.back(); };
         
         const fullImg = document.createElement('img');
         fullImg.src = img.src;
-        fullImg.onclick = (e) => { e.stopPropagation(); }; // ছবিতে ক্লিক করলে কিছু হবে না (শুধু স্লাইড)
+        fullImg.onclick = (e) => { e.stopPropagation(); };
         
         slide.appendChild(fullImg);
         sliderWrapper.appendChild(slide);
@@ -264,12 +287,10 @@
         });
     });
 
-    // ব্রাউজারের ব্যাক বাটন বা window.history.back() এর জন্য
     window.onpopstate = function(event) {
         closeModal();
     };
 
-    // মোডালের বাইরের অংশে ক্লিক হ্যান্ডলার (নিরাপত্তার জন্য)
     modal.onclick = (e) => {
         if (e.target === modal || e.target === sliderWrapper) {
             window.history.back();

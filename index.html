@@ -17,7 +17,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #ffffff;
+            background-color: #F0F3F8;
             color: #202124;
         }
 
@@ -51,7 +51,7 @@
             display: inline-block;
             margin-top: 10px;
             padding: 8px 20px;
-            background-color: #f1f3f4;
+            background-color: #D3E9FD;
             color: #01579b;
             text-decoration: none;
             border-radius: 8px;
@@ -79,7 +79,7 @@
         .stat-label { font-size: 12px; color: #5f6368; }
 
         .install-btn {
-            background-color: #01579b;
+            background-color: #0957CE;
             color: white;
             border: none;
             padding: 12px;
@@ -91,6 +91,55 @@
             margin-bottom: 30px;
             display: block;
             text-align: center;
+        }
+
+        /* What's New Section - আপনার ছবির মতো স্টাইল */
+        .whats-new-section {
+            margin-bottom: 30px;
+        }
+
+        .whats-new-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .whats-new-header h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .blue-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #0957CE;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .last-updated {
+            color: #5f6368;
+            font-size: 14px;
+            margin: 5px 0 15px 0;
+        }
+
+        .update-content {
+            font-size: 15px;
+            color: #3c4043;
+            line-height: 1.5;
+        }
+
+        .update-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .update-list {
+            margin: 0;
+            padding-left: 20px;
         }
 
         .screenshots {
@@ -189,20 +238,40 @@
 
     <div class="stats-container">
         <div class="stat-item">
-            <span class="stat-value">Version: 2.6</span> 
+            <span class="stat-value">Age</span>
+            <span class="stat-label">Rated for 12+</span> 
         </div>
         <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;">
-            <span class="stat-label">Update</span> <span class="stat-value">25/April</span>
+           <span class="stat-value">Movie type</span> <span class="stat-label">Bangla Hindi English</span> 
         </div>
         <div class="stat-item">
-            <span class="stat-value">12+</span>
-            <span class="stat-label">Rated for 12+</span>
+            <span class="stat-value">90+</span>
+            <span class="stat-label">Movie's</span>
         </div>
     </div>
 
-    <a href="https://raw.githubusercontent.com/jusfuka6-bit/Apk/main/Movie_BD_v2.6.apk" style="text-decoration: none;" id="download-trigger">
+    <a href="https://raw.githubusercontent.com/jusfuka6-bit/Apk/main/Movie_BD_v2.7.apk" style="text-decoration: none;" id="download-trigger">
         <button class="install-btn">Update</button>
     </a>
+
+    <div class="whats-new-section">
+        <div class="whats-new-header">
+            <h2>What's new</h2>
+            <span class="blue-dot"></span>
+        </div>
+        <div class="last-updated">Last updated 1 May 2026</div>
+        <div class="update-content">
+            <span class="update-title">Version 2.7 Features:</span>
+            <ul class="update-list">
+                <li> Two types of video players have been added.</li>
+                <li>Fixed the skin off issue when playing videos.</li>
+                <li>Some minor bugs have been fixed.</li>
+               
+                
+                
+            </ul>
+        </div>
+    </div>
 
     <div id="toast">অ্যাপ ডাউনলোড হচ্ছে...</div>
 
@@ -212,6 +281,7 @@
         <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_3.jpg">
         <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_4.jpg">
         <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_5.jpg">
+        <img src="https://raw.githubusercontent.com/jusfuka6-bit/img/refs/heads/main/Screenshot_6.jpg">
     </div>
 
     <div id="imageModal">
@@ -220,8 +290,8 @@
 
     <div class="about-section">
         <h2>About this app</h2>
-        <p>Movie BD - আপনার প্রিয় সিনেমা ও নাটক</p>
-        <p>আপনি যদি কোন মুভি দেখতে চান যা আমাদের অ্যাপে নেই তাহলে মুভির নাম সহ আমাদের সাথে যোগাযোগ করুন</p>
+        <p>Movie BD - Your favorite movies and dramas.</p>
+        <p>If you want to watch a movie that is not in our app, please contact us with the name of the movie.</p>
     </div>
 </div>
 
@@ -248,6 +318,7 @@
     }
 
     function closeModal() {
+        modal.style.back = 'none';
         modal.style.display = 'none';
     }
 
